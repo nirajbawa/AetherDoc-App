@@ -39,10 +39,14 @@ app.add_middleware(
 # Include Routers
 app.include_router(chat_router)
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def read_root():
     return {
         "name": "Autonomous Document Generation API",
         "status": "online",
         "documentation": "/docs"
     }
+
+@app.api_route("/health", methods=["GET", "HEAD"])
+def health_check():
+    return {"status": "ok"}

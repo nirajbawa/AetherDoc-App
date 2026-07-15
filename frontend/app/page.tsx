@@ -134,11 +134,17 @@ export default function Home() {
 
   // 3. Update browser URL when switching sessions
   useEffect(() => {
+    const url = new URL(window.location.href);
     if (activeSessionId) {
-      const url = new URL(window.location.href);
       if (url.searchParams.get("session") !== activeSessionId) {
         url.searchParams.set("session", activeSessionId);
         window.history.pushState(null, "", url.pathname + url.search);
+      }
+    } else {
+      // Clear stale session param when no sessions remain
+      if (url.searchParams.has("session")) {
+        url.searchParams.delete("session");
+        window.history.pushState(null, "", url.pathname);
       }
     }
   }, [activeSessionId]);
@@ -161,11 +167,12 @@ export default function Home() {
 
     const syncSession = async () => {
       try {
+        // Guard: skip if session was deleted from local state
         const current = sessions.find(s => s.id === activeSessionId);
-        if (current) {
-          const hasUserMessages = current.messages.some((m) => m.role === "user");
-          if (!hasUserMessages) return;
-        }
+        if (!current) return;
+
+        const hasUserMessages = current.messages.some((m) => m.role === "user");
+        if (!hasUserMessages) return;
 
         const res = await axios.get(`${API_BASE_URL}/chat/session/${activeSessionId}`);
         const data = res.data;
@@ -184,7 +191,10 @@ export default function Home() {
           )
         );
       } catch (err: any) {
-        console.error("Failed to sync session from backend:", err);
+        // Only log non-404 errors to avoid noise from deleted sessions
+        if (err?.response?.status !== 404) {
+          console.error("Failed to sync session from backend:", err);
+        }
       }
     };
 

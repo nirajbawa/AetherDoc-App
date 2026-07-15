@@ -75,3 +75,11 @@ We have implemented two core architectural features to satisfy the engineering i
 - **What was implemented:** A specialized `@tool` endpoint (`compile_document_tool`) bound to a LangGraph `react` agent graph. When a compilation trigger (e.g. `"compile document"` or the Quick Compile button) is detected, the agent routes the session structure payload into the Python execution tool.
 - **Why we chose it:** Text-generation LLMs are highly non-deterministic and cannot directly construct binary files like `.docx` documents. Bridging the LLM with a dedicated compiler script allows the agent to generate formatted corporate documents reliably.
 - **How it improves the agent:** It delegates file operations to structured python-docx logic. The agent is freed from trying to simulate document formatting, enabling it to write content in clean markdown blocks while the backend ensures margins, colors, page numbers, callout blocks, and alternating shaded table rows are styled with high precision.
+
+### 3.3 Error Handling & Recovery
+- **What was implemented:** A multi-tier error handling policy that spans both Next.js UI elements and backend route definitions:
+  - *Network Resilience:* The frontend catches Axios query errors (like an offline FastAPI instance or down database), displaying a warning box in the chat feed instead of letting the application crash.
+  - *Database Fallbacks:* If MongoDB operations throw errors on initial loads, the frontend falls back to browser `localStorage` to load and save conversations seamlessly.
+  - *Compiler Exception Logging:* Tool execution crashes are intercepted, marking status as `failed` and appending detailed CLI error trace messages directly to the Workspace log drawer.
+- **Why we chose it:** Stateful web apps must handle connection cuts, LLM timeouts, and DB restarts gracefully rather than freezing the dashboard.
+- **How it improves the agent:** It ensures high availability and robustness. The user receives clear visual instructions on how to recover (e.g. restart backend or check database credentials) and never experiences silent screen freezes.
