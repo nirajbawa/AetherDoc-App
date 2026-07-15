@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environments & Dependencies
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Generated Documents Output
+generated_docs/
+
+# Testing & Coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+
+# Logs
+*.log
+pip-log.txt
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo

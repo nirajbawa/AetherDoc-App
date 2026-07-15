@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030712;
+  --foreground: #f3f4f6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for developer logs terminal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.4);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Stepper Glow Line */
+.glow-line {
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+}
+
+/* Glowing card outline */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+    border-color: rgba(139, 92, 246, 0.4);
+  }
+}
+.glowing-border {
+  animation: glowPulse 4s infinite ease-in-out;
+}
+
+/* Log entry appearance */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.log-item {
+  animation: slideInUp 0.15s ease-out forwards;
+}
+
